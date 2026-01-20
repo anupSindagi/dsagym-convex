@@ -3,7 +3,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
+import { Dumbbell } from "lucide-react";
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
@@ -11,42 +11,23 @@ export default function SignIn() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   return (
-    <div className="flex flex-col gap-8 w-full max-w-lg mx-auto h-screen justify-center items-center px-4">
+    <div className="flex flex-col gap-8 w-full max-w-md mx-auto min-h-screen justify-center items-center px-4 bg-background">
       <div className="text-center flex flex-col items-center gap-4">
-        <div className="flex items-center gap-6">
-          <Image
-            src="/convex.svg"
-            alt="Convex Logo"
-            width={90}
-            height={90}
-          />
-          <div className="w-px h-20 bg-slate-300 dark:bg-slate-600"></div>
-          <Image
-            src="/nextjs-icon-light-background.svg"
-            alt="Next.js Logo"
-            width={90}
-            height={90}
-            className="dark:hidden"
-          />
-          <Image
-            src="/nextjs-icon-dark-background.svg"
-            alt="Next.js Logo"
-            width={90}
-            height={90}
-            className="hidden dark:block"
-          />
+        <div className="flex items-center gap-3">
+          <Dumbbell className="h-10 w-10 text-foreground" />
+          <h1 className="text-4xl font-bold text-foreground tracking-tight">
+            DSAgym
+          </h1>
         </div>
-        <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-200">
-          Convex + Next.js + Convex Auth
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          This demo uses Convex Auth for authentication, so you will need to
-          sign in or sign up to access the demo.
+        <p className="text-muted-foreground">
+          Track and solve LeetCode problems based on your rating
         </p>
       </div>
+
       <form
-        className="flex flex-col gap-4 w-full bg-slate-100 dark:bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-300 dark:border-slate-600"
+        className="flex flex-col gap-4 w-full bg-card p-8 border border-border"
         onSubmit={(e) => {
           e.preventDefault();
           setLoading(true);
@@ -63,16 +44,21 @@ export default function SignIn() {
             });
         }}
       >
+        <h2 className="text-xl font-semibold text-card-foreground text-center">
+          {flow === "signIn" ? "Sign In" : "Create Account"}
+        </h2>
+
         <input
-          className="bg-white dark:bg-slate-900 text-foreground rounded-lg p-3 border border-slate-300 dark:border-slate-600 focus:border-slate-500 dark:focus:border-slate-400 focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700 outline-none transition-all placeholder:text-slate-400"
+          className="bg-background text-foreground p-3 border border-input focus:border-ring focus:ring-1 focus:ring-ring outline-none transition-colors placeholder:text-muted-foreground"
           type="email"
           name="email"
           placeholder="Email"
           required
         />
+
         <div className="flex flex-col gap-1">
           <input
-            className="bg-white dark:bg-slate-900 text-foreground rounded-lg p-3 border border-slate-300 dark:border-slate-600 focus:border-slate-500 dark:focus:border-slate-400 focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700 outline-none transition-all placeholder:text-slate-400"
+            className="bg-background text-foreground p-3 border border-input focus:border-ring focus:ring-1 focus:ring-ring outline-none transition-colors placeholder:text-muted-foreground"
             type="password"
             name="password"
             placeholder="Password"
@@ -80,34 +66,38 @@ export default function SignIn() {
             required
           />
           {flow === "signUp" && (
-            <p className="text-xs text-slate-500 dark:text-slate-400 px-1">
+            <p className="text-xs text-muted-foreground px-1">
               Password must be at least 8 characters
             </p>
           )}
         </div>
+
         <button
-          className="bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-semibold rounded-lg py-3 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="bg-primary text-primary-foreground font-semibold py-3 hover:bg-primary/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={loading}
         >
-          {loading ? "Loading..." : flow === "signIn" ? "Sign in" : "Sign up"}
+          {loading ? "Loading..." : flow === "signIn" ? "Sign In" : "Sign Up"}
         </button>
+
         <div className="flex flex-row gap-2 text-sm justify-center">
-          <span className="text-slate-600 dark:text-slate-400">
+          <span className="text-muted-foreground">
             {flow === "signIn"
               ? "Don't have an account?"
               : "Already have an account?"}
           </span>
-          <span
-            className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 font-medium underline decoration-2 underline-offset-2 hover:no-underline cursor-pointer transition-colors"
+          <button
+            type="button"
+            className="text-foreground hover:text-foreground/80 font-medium underline underline-offset-2 cursor-pointer transition-colors"
             onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
           >
             {flow === "signIn" ? "Sign up" : "Sign in"}
-          </span>
+          </button>
         </div>
+
         {error && (
-          <div className="bg-rose-500/10 border border-rose-500/30 dark:border-rose-500/50 rounded-lg p-4">
-            <p className="text-rose-700 dark:text-rose-300 font-medium text-sm break-words">
+          <div className="bg-destructive/10 border border-destructive/30 p-4">
+            <p className="text-destructive font-medium text-sm break-words">
               Error: {error}
             </p>
           </div>
